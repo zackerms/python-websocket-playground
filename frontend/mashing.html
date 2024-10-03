@@ -34,20 +34,11 @@
         const buttonReset = document.getElementById("button-reset");
     
         const ws = new WebSocket("ws://localhost:8000/ws/mashing");
-        ws.onopen = function () {
-            console.log("Connected to the server");
-        };
         ws.onmessage = function (event) {
             console.log("Message received:", event.data);
             const data = JSON.parse(event.data);
             divCounterA.innerText = data["a"];
             divCounterB.innerText = data["b"];
-        };
-        ws.onerror = function (event) {
-            console.error("WebSocket error observed:", event);
-        };
-        ws.onclose = function () {
-            console.log("Connection closed");
         };
 
         buttonA.addEventListener("click", function () {

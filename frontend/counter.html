@@ -19,19 +19,9 @@
         const buttonDecrement = document.getElementById("button-decrement");
 
         const ws = new WebSocket("ws://localhost:8000/ws/counter");
-        ws.onopen = function() {
-            console.log("Connected to the server");
-        };
         ws.onmessage = function(event) {
-            console.log("Message received:", event.data);
             const data = JSON.parse(event.data);
             divCounterValue.innerText = data["counter"];
-        };
-        ws.onerror = function(event) {
-            console.error("WebSocket error observed:", event);
-        };
-        ws.onclose = function() {
-            console.log("Connection closed");
         };
 
         buttonIncrement.addEventListener("click", function increment(){
