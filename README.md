@@ -12,3 +12,10 @@ uvicorn main:app --reload
 cd frontend
 python -m http.server 3000
 ```
+
+### アクセスポイント
+
+| 種類 | URL |
+| --- | --- |
+| バックエンド | http://localhost:8000 |
+| フロントエンド | http://localhost:3000 |
