@@ -14,6 +14,10 @@
     </div>
 
     <script>
+        const divCounterValue = document.getElementById("counter-value");
+        const buttonIncrement = document.getElementById("button-increment");
+        const buttonDecrement = document.getElementById("button-decrement");
+
         const ws = new WebSocket("ws://localhost:8000/ws/counter");
         ws.onopen = function() {
             console.log("Connected to the server");
@@ -21,7 +25,7 @@
         ws.onmessage = function(event) {
             console.log("Message received:", event.data);
             const data = JSON.parse(event.data);
-            document.getElementById("counter-value").innerText = data["counter"];
+            divCounterValue.innerText = data["counter"];
         };
         ws.onerror = function(event) {
             console.error("WebSocket error observed:", event);
@@ -29,9 +33,6 @@
         ws.onclose = function() {
             console.log("Connection closed");
         };
-
-        const buttonIncrement = document.getElementById("button-increment");
-        const buttonDecrement = document.getElementById("button-decrement");
 
         buttonIncrement.addEventListener("click", function increment(){
             ws.send(JSON.stringify({ value: 1 }));
