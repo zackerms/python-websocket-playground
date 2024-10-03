@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter</title>
+</head>
+<body>
+    <h1>Counter App</h1> 
+    <div>
+        <button id="button-increment">Increment</button>
+        <div id="counter-value">Counter Value Here</div>
+        <button id="button-decrement">Decrement</button>
+    </div>
+
+    <script>
+        const ws = new WebSocket("ws://localhost:8000/ws/counter");
+        ws.onopen = function() {
+            console.log("Connected to the server");
+        };
+        ws.onmessage = function(event) {
+            console.log("Message received:", event.data);
+            const data = JSON.parse(event.data);
+            document.getElementById("counter-value").innerText = data["counter"];
+        };
+        ws.onerror = function(event) {
+            console.error("WebSocket error observed:", event);
+        };
+        ws.onclose = function() {
+            console.log("Connection closed");
+        };
+
+        const buttonIncrement = document.getElementById("button-increment");
+        const buttonDecrement = document.getElementById("button-decrement");
+
+        buttonIncrement.addEventListener("click", function increment(){
+            ws.send(JSON.stringify({ value: 1 }));
+        });
+        buttonDecrement.addEventListener("click", function decrement(){
+            ws.send(JSON.stringify({ value: -1 }));
+        });
+    </script>
+</body>
+</html>
