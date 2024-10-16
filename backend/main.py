@@ -2,6 +2,7 @@ from typing import List
 from logging import getLogger
 from fastapi import FastAPI, WebSocketDisconnect
 from fastapi import FastAPI, WebSocket
+from fastapi.websockets import WebSocketState
 
 app = FastAPI()
 logger = getLogger(__name__)
@@ -106,3 +107,41 @@ async def websocket_mashing(websocket: WebSocket):
         print("Disconnect")
         connections_mashing.remove(websocket)
         # await websocket.close()
+
+n_participants = 0
+connections_benchmark: List[WebSocket] = []
+@app.websocket("/ws/benchmark")
+async def websocket_benchmark(websocket: WebSocket):
+    """
+    ベンチマーク
+    ブロードキャストを行うような環境で、
+    コネクション数とメモリへの影響を調べる    
+    """
+    global n_participants
+    global connections_benchmark
+
+    # 新しい接続を待機
+    await websocket.accept()
+    print("Accept new connection")
+
+    n_participants += 1
+    await websocket.send_json({"value": n_participants})
+
+    # 接続されたクライアントを登録する
+    connections_benchmark.append(websocket)
+
+    # 現在のカウンターの値を送信
+    for connection in connections_benchmark:
+        if connection.application_state != WebSocketState.CONNECTED:
+            continue
+        await connection.send_json({"value": n_participants})
+
+    try:
+        while True:
+            # クライアントからデータを受信
+            data = await websocket.receive_json()
+            print(f"Receive data: {data}")  
+    except WebSocketDisconnect:
+        # クライアントが切断された場合、接続を削除する
+        print("Disconnect")
+        n_participants -= 1
