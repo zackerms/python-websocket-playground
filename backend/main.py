@@ -8,6 +8,8 @@ from fastapi.websockets import WebSocketState
 app = FastAPI()
 logger = getLogger("uvicorn")
 
+logger.info(f"PID: {os.getpid()}")
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
