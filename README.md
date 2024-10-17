@@ -19,3 +19,12 @@ python -m http.server 3000
 | --- | --- |
 | バックエンド | http://localhost:8000 |
 | フロントエンド | http://localhost:3000 |
+
+
+### ベンチマーク
+```sh
+python3 benchmark.py --n 100
+```
+```sh
+uvicorn main:app
+```
