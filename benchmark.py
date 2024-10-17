@@ -27,7 +27,7 @@ def main():
     parser.add_argument("--n", type=int, default=5, help="Number of WebSocket connections")
     parser.add_argument("--url", type=str, default="ws://localhost:8000/ws/benchmark", help="WebSocket URL")
     parser.add_argument("--duration", type=float, default=5, help="Duration to keep each connection open (in seconds)")
-    parser.add_argument("--delay", type=float, default=0.1, help="Delay between each connection (in seconds)")
+    parser.add_argument("--delay", type=float, default=0.01, help="Delay between each connection (in seconds)")
     args = parser.parse_args()
 
     print(f"Establishing {args.n} WebSocket connections to {args.url}")
